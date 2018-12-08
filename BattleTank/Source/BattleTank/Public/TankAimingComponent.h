@@ -2,13 +2,15 @@
 
 #pragma once
 
-#include "Kismet/GameplayStatics.h"
-#include "GameFramework/Actor.h"
+
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "TankBarrelComponent.h"
+
 #include "TankAimingComponent.generated.h"
 
+
+class UTankBarrelComponent;
+class UTankTurretComponent;
 
 
 
@@ -26,8 +28,13 @@ public:
 		
 	void SetBarrel(UTankBarrelComponent*);
 
+	void SetTurret(UTankTurretComponent*);
+
 	void MoveBarrelTowards(FVector);
+
+	//void MoveCamera(FVector);
 
 private:
 	UTankBarrelComponent* Barrel = nullptr;
+	UTankTurretComponent* Turret = nullptr;
 };

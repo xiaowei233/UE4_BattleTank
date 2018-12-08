@@ -2,12 +2,17 @@
 
 #pragma once
 
-#include "TankAimingComponent.h"
+
 #include "CoreMinimal.h"
+
 #include "GameFramework/Pawn.h"
-#include "TankBarrelComponent.h"
+
 #include "Tank.generated.h"
 
+
+class UTankTurretComponent;
+class UTankBarrelComponent;
+class UTankAimingComponent;
 UCLASS()
 class BATTLETANK_API ATank : public APawn
 {
@@ -16,7 +21,7 @@ class BATTLETANK_API ATank : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ATank();
-
+	//void MoveCamera(FVector);
 	void AimAt(FVector);
 
 protected:
@@ -31,6 +36,15 @@ private:
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelReference(UTankBarrelComponent* BarrelToSet);
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		void Fire();
+
+	float FireTime = 0.0;
+	UPROPERTY(EditAnywhere)
+	float FireInterval = 3.0;
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		void SetTurretReference(UTankTurretComponent* TurretToSet);
 	UPROPERTY(EditAnywhere, Category = Firing)
 		float FiringVelocity = 100000.;
 };

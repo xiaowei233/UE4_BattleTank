@@ -32,7 +32,11 @@ void APlayerTankController::AimTowardCrosshair()
 	if (!GetControlledTank()) {
 		return;
 	}
+	//FVector CameraLocation = PlayerCameraManager->GetCameraLocation();
+	//FVector MyLocation = GetOwner()->GetActorLocation();
+	//FVector Direction = MyLocation - CameraLocation;
 
+	//GetControlledTank()->MoveCamera(Direction);
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation)) {
 		GetControlledTank()->AimAt(HitLocation);
