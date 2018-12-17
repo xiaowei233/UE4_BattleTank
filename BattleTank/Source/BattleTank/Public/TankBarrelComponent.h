@@ -21,7 +21,7 @@ public:
 
 	void Elevate(float);
 	UPROPERTY(EditAnywhere, Category = Setup)
-		float MaxElevateDPS = 5;
+		float MaxElevateDPS = 2;
 	UPROPERTY(EditAnywhere, Category = Setup)
 		float MaxElevationDegree = 23;
 	UPROPERTY(EditAnywhere, Category = Setup)

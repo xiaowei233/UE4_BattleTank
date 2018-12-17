@@ -4,41 +4,27 @@
 
 
 
-
-
-ATank* ATankAIController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
+#include "Tank.h"
 
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto ControlledTank = GetControlledTank();
+	ControlledTank = Cast<ATank>(GetPawn());
 	if (!ControlledTank) {
 		UE_LOG(LogTemp, Warning, TEXT("AIController ControlledTank failed"));
 	}
 
-	auto PlayerTank = GetPlayerTank();
+	PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (!PlayerTank) {
 		UE_LOG(LogTemp, Warning, TEXT("AIController GetPlayerTank failed"));
 	}
 }
 
-ATank* ATankAIController::GetPlayerTank() const
-{
-	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
-	if (!PlayerTank) {
-		return nullptr;
-	}
-	return Cast<ATank>(PlayerTank);
-}
-
 void ATankAIController::Tick(float DeltaTime) 
 {
 	Super::Tick(DeltaTime);
-
-	if (GetPlayerTank() && GetControlledTank()) {
-		GetControlledTank()->AimAt(GetPlayerTank()->GetActorLocation());
+	if (PlayerTank && ControlledTank) {
+		ControlledTank->AimAt(PlayerTank->GetActorLocation());
+		ControlledTank->Fire();
 	}
 }
