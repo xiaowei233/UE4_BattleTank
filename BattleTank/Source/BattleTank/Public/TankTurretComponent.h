@@ -22,10 +22,10 @@ public:
 		
 	void RotateTurret(float);
 	UPROPERTY(EditAnywhere, Category = Setup)
-		float MaxRotateDPS = 2;
+		float MaxRotateDPS = 20;
 	UPROPERTY(EditAnywhere, Category = Setup)
-		float MaxRotateDegree = 170;
+		float MaxRotateDegree = 75;
 	UPROPERTY(EditAnywhere, Category = Setup)
-		float MinRotateDegree = -170;
+		float MinRotateDegree = -75;
 
 };

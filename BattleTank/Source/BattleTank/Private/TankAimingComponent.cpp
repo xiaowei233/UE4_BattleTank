@@ -24,8 +24,6 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float FiringVelocity)
 	}
 	FVector TossVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("FiringLocation"));
-	auto TankName = GetOwner()->GetName();
-	auto BarrelLocation = Barrel->GetComponentLocation();
 	if (UGameplayStatics::SuggestProjectileVelocity(
 		this,
 		TossVelocity,
@@ -42,7 +40,6 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float FiringVelocity)
 	)) {
 		auto AimingDirection = TossVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimingDirection);
-		//UE_LOG(LogTemp, Warning, TEXT("Tank %s is aiming at %s"), *TankName, *AimingDirection.ToString());
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("No Aiming Solution found"));
@@ -62,15 +59,7 @@ void UTankAimingComponent::SetTurret(UTankTurretComponent* TurretToSet)
 		Turret = TurretToSet;
 	}
 }
-//
-//void UTankAimingComponent::MoveCamera(FVector ViewLocation)
-//{
-//	auto CurrentAim = Barrel->GetForwardVector().Rotation();
-//	auto TargetAim = ViewLocation.Rotation();
-//	auto DeltaRotator = TargetAim - CurrentAim;
-//	Barrel->Elevate(DeltaRotator.Pitch);
-//	Turret->RotateTurret(DeltaRotator.Yaw);
-//}
+
 void UTankAimingComponent::MoveBarrelTowards(FVector AimingDirection)
 {
 	auto CurrentAim = Barrel->GetForwardVector().Rotation();
@@ -78,5 +67,10 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimingDirection)
 	auto DeltaRotator = TargetAim - CurrentAim;
 	Barrel->Elevate(DeltaRotator.Pitch);
 	Turret->RotateTurret(DeltaRotator.Yaw);
+
+	//if (Barrel->GetOwner()->GetName() == "BP_Tank4")
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("%s aiming direction, %s target direction"), *CurrentAim.ToString(), *TargetAim.ToString())
+	//}
 }
 

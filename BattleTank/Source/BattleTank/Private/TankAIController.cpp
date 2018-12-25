@@ -26,5 +26,6 @@ void ATankAIController::Tick(float DeltaTime)
 	if (PlayerTank && ControlledTank) {
 		ControlledTank->AimAt(PlayerTank->GetActorLocation());
 		ControlledTank->Fire();
+		//UE_LOG(LogTemp, Warning, TEXT("%s aiming at location %s"), *ControlledTank->GetName(), *PlayerTank->GetActorLocation().ToString())
 	}
 }

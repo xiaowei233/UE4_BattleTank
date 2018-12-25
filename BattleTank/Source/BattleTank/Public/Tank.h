@@ -49,7 +49,7 @@ private:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 		void SetTurretReference(UTankTurretComponent* TurretToSet);
 	UPROPERTY(EditAnywhere, Category = Firing)
-		float FiringVelocity = 100000.;
+		float FiringVelocity = 10000.;
 
 	UPROPERTY(EditAnywhere, Category = Setup)
 		TSubclassOf<AProjectile> ProjectileBP;
