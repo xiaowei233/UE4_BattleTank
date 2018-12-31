@@ -16,8 +16,6 @@ UTankTurretComponent::UTankTurretComponent()
 
 void UTankTurretComponent::RotateTurret(float Speed)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("%f"), speed);
-
 	Speed = FMath::Clamp<float>(Speed, -1, 1);
 	auto RotationChange = Speed * MaxRotateDPS * GetWorld()->DeltaTimeSeconds;
 	auto NewRotation = RelativeRotation.Yaw + RotationChange;

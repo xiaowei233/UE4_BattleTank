@@ -67,10 +67,5 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimingDirection)
 	auto DeltaRotator = TargetAim - CurrentAim;
 	Barrel->Elevate(DeltaRotator.Pitch);
 	Turret->RotateTurret(DeltaRotator.Yaw);
-
-	//if (Barrel->GetOwner()->GetName() == "BP_Tank4")
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("%s aiming direction, %s target direction"), *CurrentAim.ToString(), *TargetAim.ToString())
-	//}
 }
 
