@@ -22,11 +22,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 		void IntendMoveLeftRight(float Throttle);
 
-protected:
 	UFUNCTION(BlueprintCallable, Category = SetUp)
 		void SetTracks(UTankTrackComponent* LeftTrackToSet, UTankTrackComponent* RightTrackToSet);
 
+protected:
+	virtual void RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed) override;
+
+
 private:
+
 	UTankTrackComponent* LeftTrack = nullptr;
 	UTankTrackComponent* RightTrack = nullptr;
 

@@ -6,7 +6,7 @@
 
 void UTankBarrelComponent::Elevate(float Speed)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("%f"), speed);
+
 	Speed = FMath::Clamp<float>(Speed, -1, 1);
 	auto ElevationChange = Speed * MaxElevateDPS * GetWorld()->DeltaTimeSeconds;
 	auto NewElevation = RelativeRotation.Pitch + ElevationChange;

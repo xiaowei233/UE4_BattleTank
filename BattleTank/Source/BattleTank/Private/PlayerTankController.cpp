@@ -14,9 +14,6 @@ void APlayerTankController::BeginPlay()
 {
 	Super::BeginPlay();
 	auto ControlledTank = GetControlledTank();
-	if (ControlledTank) {
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController %s"), *(ControlledTank->GetName()));
-	}
 
 }
 

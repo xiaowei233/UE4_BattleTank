@@ -27,4 +27,8 @@ public:
 private:
 	ATank* ControlledTank = nullptr;
 	ATank* PlayerTank = nullptr;
+
+	float MinRange = 1600.;
+	float MaxRange = 5200.;
+	float AcceptanceRadius = FMath::RandRange(MinRange, MaxRange);
 };
