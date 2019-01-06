@@ -3,14 +3,13 @@
 #pragma once
 
 #include "GameFramework/Controller.h"
-
-#include "Engine/World.h"
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
 
 class ATank;
+class UTankAimingComponent;
 /**
  * 
  */
@@ -25,6 +24,7 @@ public:
 	virtual void Tick(float) override;
 
 private:
+	UTankAimingComponent* AimingComponent = nullptr;
 	ATank* ControlledTank = nullptr;
 	ATank* PlayerTank = nullptr;
 

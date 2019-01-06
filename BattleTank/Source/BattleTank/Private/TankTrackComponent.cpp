@@ -9,3 +9,18 @@ void UTankTrackComponent::SetThrottle(float Throttle)
 	auto Tank = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
 	Tank->AddForceAtLocation(ForceApplied, ForceLocation);
 }
+
+UTankTrackComponent::UTankTrackComponent()
+{
+	PrimaryComponentTick.bCanEverTick = true;
+}
+
+void UTankTrackComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
+	auto AccelerationCorrection = -SlippageSpeed / DeltaTime * GetRightVector();
+	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
+	auto CorrectionForce = TankRoot->GetMass() * AccelerationCorrection / 2;
+	TankRoot->AddForce(CorrectionForce);
+
+}

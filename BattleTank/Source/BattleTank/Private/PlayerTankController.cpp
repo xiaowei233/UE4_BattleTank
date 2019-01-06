@@ -2,8 +2,9 @@
 
 
 #include "PlayerTankController.h"
-
-
+#include "TankAimingComponent.h"
+#include "Engine/world.h"
+#include "Tank.h"
 
 ATank* APlayerTankController::GetControlledTank() const
 {
@@ -13,30 +14,30 @@ ATank* APlayerTankController::GetControlledTank() const
 void APlayerTankController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto ControlledTank = GetControlledTank();
-
+	AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	if (ensure(AimingComponent)) {
+		FindAimingComponent(AimingComponent);
+		UE_LOG(LogTemp, Warning, TEXT("FindAimingComponent is called."));
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("The Aiming Component is not found."));
+	}
 }
 
 void APlayerTankController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	AimTowardCrosshair();
-
 }
 
 void APlayerTankController::AimTowardCrosshair()
 {
-	if (!GetControlledTank()) {
+	if (!GetControlledTank() || !AimingComponent) {
 		return;
 	}
-	//FVector CameraLocation = PlayerCameraManager->GetCameraLocation();
-	//FVector MyLocation = GetOwner()->GetActorLocation();
-	//FVector Direction = MyLocation - CameraLocation;
-
-	//GetControlledTank()->MoveCamera(Direction);
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation)) {
-		GetControlledTank()->AimAt(HitLocation);
+		AimingComponent->AimAt(HitLocation);
 	}
 }
 
@@ -45,7 +46,6 @@ bool APlayerTankController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 	int32 ViewportX, ViewportY;
 	GetViewportSize(ViewportX, ViewportY);
 	auto ScreenLocation = FVector2D(ViewportX * CrosshairXLocation, ViewportY * CrosshairYLocation);
-
 
 	FVector WorldLocation, WorldDirection;
 	FHitResult HitResult;

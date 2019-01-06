@@ -4,8 +4,6 @@
 
 
 #include "GameFramework/Controller.h"
-#include "Engine/world.h"
-#include "Tank.h"
 
 #include "GameFramework/PlayerController.h"
 #include "CoreMinimal.h"
@@ -14,14 +12,21 @@
 /**
  * 
  */
-UCLASS()
+class ATank;
+class UTankAimingComponent;
+UCLASS(Blueprintable)
 class BATTLETANK_API APlayerTankController : public APlayerController
 {
 	GENERATED_BODY()
 	
+protected:
+	UFUNCTION(BlueprintCallable, Category = "SetUp")
+		ATank* GetControlledTank() const;
+	UFUNCTION(BlueprintImplementableEvent, Category = "SetUp")
+		void FindAimingComponent(UTankAimingComponent* AimingComponent);
+
 private:
-	ATank* GetControlledTank() const;
-	
+	UTankAimingComponent* AimingComponent = nullptr;
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float) override;
