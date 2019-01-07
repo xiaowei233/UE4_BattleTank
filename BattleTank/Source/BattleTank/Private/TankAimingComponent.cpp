@@ -53,7 +53,17 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimingDirection)
 	auto TargetAim = AimingDirection.Rotation();
 	auto DeltaRotator = TargetAim - CurrentAim;
 	Barrel->Elevate(DeltaRotator.Pitch);
-	Turret->RotateTurret(DeltaRotator.Yaw);
+	if (FMath::Abs<float>(DeltaRotator.Yaw) <= 180) {
+		Turret->RotateTurret(DeltaRotator.Yaw);
+	}
+	else {
+		Turret->RotateTurret(-DeltaRotator.Yaw);
+	}
+}
+
+EAimingStatus UTankAimingComponent::GetFireStatus()
+{
+	return FireStatus;
 }
 
 void UTankAimingComponent::SetBarrelTurret(UTankBarrelComponent * BarrelToSet, UTankTurretComponent * TurretToSet)
@@ -73,6 +83,7 @@ void UTankAimingComponent::SetProjectileBP(TSubclassOf<AProjectile> ProjectileBl
 }
 void UTankAimingComponent::BeginPlay()
 {
+	Super::BeginPlay();
 	FireTime = GetWorld()->GetTimeSeconds();
 }
 
@@ -104,7 +115,6 @@ void UTankAimingComponent::Fire()
 {
 	if (!ensure(Barrel && ProjectileBP)) { return; }
 	if (FireStatus != EAimingStatus::Reloading) {
-
 		auto FiredProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBP, Barrel->GetSocketLocation(FName("FiringLocation")), Barrel->GetSocketRotation(FName("FiringLocation")));
 		FiredProjectile->LaunchProjectile(FireSpeed);
 		FireTime = GetWorld()->GetTimeSeconds();

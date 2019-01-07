@@ -17,6 +17,7 @@ void ATankAIController::BeginPlay()
 	}
 
 	PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	//UE_LOG(LogTemp,Warning, TEXT("Player Tank Name: %s"), *PlayerTank->GetName());
 	if (!PlayerTank) {
 		UE_LOG(LogTemp, Warning, TEXT("AIController GetPlayerTank failed"));
 	}
@@ -27,8 +28,11 @@ void ATankAIController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (ensure(PlayerTank && ControlledTank && AimingComponent)) {
 		MoveToActor(PlayerTank, AcceptanceRadius);
-		AimingComponent->AimAt(PlayerTank->GetActorLocation());
-		AimingComponent->Fire();
+		AimingComponent->AimAt(PlayerTank->GetActorLocation()+FVector(0, 0, 100));	
+		if (AimingComponent->GetFireStatus() == EAimingStatus::Locked) {
+			AimingComponent->Fire();
+
+		}
 	}
 }
 

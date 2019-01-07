@@ -44,10 +44,11 @@ public:
 
 	void MoveBarrelTowards(FVector);
 
+	EAimingStatus GetFireStatus();
 protected:
-
 	UPROPERTY(BlueprintReadOnly)
 		EAimingStatus FireStatus = EAimingStatus::Reloading;
+
 	UPROPERTY(EditAnywhere, Category = Firing)
 		float FireSpeed = 10000.;
 	UPROPERTY(EditAnywhere)

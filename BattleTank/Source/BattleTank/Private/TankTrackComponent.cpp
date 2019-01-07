@@ -1,10 +1,33 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankTrackComponent.h"
+#include "Engine/World.h"
 
 void UTankTrackComponent::SetThrottle(float Throttle)
 {
-	auto ForceApplied = GetForwardVector() * Throttle * TrackMaxDriveForce;
+	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -2, 2);
+}
+
+void UTankTrackComponent::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+
+	ApplyDriveForce();
+	//ApplySideForce();
+	CurrentThrottle = 0;
+}
+
+void UTankTrackComponent::ApplySideForce()
+{
+	auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
+	auto AccelerationCorrection = -SlippageSpeed / GetWorld()->GetDeltaSeconds() * GetRightVector();
+	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
+	auto CorrectionForce = TankRoot->GetMass() * AccelerationCorrection / 2;
+	TankRoot->AddForce(CorrectionForce);
+}
+
+void UTankTrackComponent::ApplyDriveForce()
+{
+	auto ForceApplied = GetForwardVector() * CurrentThrottle * TrackMaxDriveForce;
 	auto ForceLocation = GetComponentLocation();
 	auto Tank = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
 	Tank->AddForceAtLocation(ForceApplied, ForceLocation);
@@ -12,15 +35,10 @@ void UTankTrackComponent::SetThrottle(float Throttle)
 
 UTankTrackComponent::UTankTrackComponent()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UTankTrackComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+void UTankTrackComponent::BeginPlay()
 {
-	auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
-	auto AccelerationCorrection = -SlippageSpeed / DeltaTime * GetRightVector();
-	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
-	auto CorrectionForce = TankRoot->GetMass() * AccelerationCorrection / 2;
-	TankRoot->AddForce(CorrectionForce);
-
+	OnComponentHit.AddDynamic(this, &UTankTrackComponent::OnHit);
 }

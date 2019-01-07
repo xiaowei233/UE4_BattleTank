@@ -18,11 +18,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void SetThrottle(float Throttle);
 
-protected:
-
+private:
 	UTankTrackComponent();
+	UFUNCTION()
+		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+	void ApplySideForce();
+	void ApplyDriveForce();
+
+	virtual void BeginPlay() override;
 	UPROPERTY(EditDefaultsOnly)
-		float TrackMaxDriveForce = 67000000.0;	
+		float TrackMaxDriveForce = 73000000.0;
+	float CurrentThrottle = 0;
 };

@@ -23,12 +23,12 @@ public:
 
 	virtual void Tick(float) override;
 
+	UPROPERTY(EditAnywhere, Category = "Set Up")
+	float AcceptanceRadius = 5000.;
+
+
 private:
 	UTankAimingComponent* AimingComponent = nullptr;
 	ATank* ControlledTank = nullptr;
 	ATank* PlayerTank = nullptr;
-
-	float MinRange = 1600.;
-	float MaxRange = 5200.;
-	float AcceptanceRadius = FMath::RandRange(MinRange, MaxRange);
 };
