@@ -15,9 +15,10 @@ void APlayerTankController::BeginPlay()
 {
 	Super::BeginPlay();
 	AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
-	if (ensure(AimingComponent)) {
+	bool IsMainMenu = GetWorld()->GetMapName() == "UEDPIE_0_StartMap";
+	if (ensure(AimingComponent) && !IsMainMenu) {
 		FindAimingComponent(AimingComponent);
-		UE_LOG(LogTemp, Warning, TEXT("FindAimingComponent is called."));
+		UE_LOG(LogTemp, Warning, TEXT("The Aiming Component is found %s."), *GetWorld()->GetMapName());
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("The Aiming Component is not found."));

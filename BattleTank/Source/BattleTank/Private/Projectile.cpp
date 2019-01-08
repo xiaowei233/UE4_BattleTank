@@ -2,7 +2,8 @@
 
 #include "Projectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-
+#include "Components/StaticMeshComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 // Sets default values
 AProjectile::AProjectile()
 {
@@ -10,6 +11,14 @@ AProjectile::AProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Movement Component"));
 	ProjectileMovementComponent->bAutoActivate = false;
+
+	CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh"));
+	CollisionMesh->SetNotifyRigidBodyCollision(true);
+	SetRootComponent(CollisionMesh);
+	CollisionMesh->SetVisibility(false);
+
+	LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast Particles"));
+	LaunchBlast->AttachTo(RootComponent);
 }
 
 // Called when the game starts or when spawned

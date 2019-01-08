@@ -14,7 +14,8 @@ enum class EAimingStatus: uint8
 {
 	Locked,
 	Aiming,
-	Reloading
+	Reloading,
+	OutOfAmmo
 };
 
 class UTankBarrelComponent;
@@ -40,11 +41,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 		void Fire();
 
+	UFUNCTION(BlueprintCallable)
+		void Reload();
+
 	void AimAt(FVector, float = 10000.);
 
 	void MoveBarrelTowards(FVector);
 
+	bool IsReloading();
 	EAimingStatus GetFireStatus();
+	//int GetCurrentAmmo();
 protected:
 	UPROPERTY(BlueprintReadOnly)
 		EAimingStatus FireStatus = EAimingStatus::Reloading;
@@ -52,7 +58,13 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Firing)
 		float FireSpeed = 10000.;
 	UPROPERTY(EditAnywhere)
-		float FireInterval = 1.0;
+		float FireInterval = 2.5;
+	UPROPERTY(EditAnywhere)
+		float ReloadInterval = 5.;
+	UPROPERTY(EditAnywhere)
+		int32 MaxAmmo = 7;
+	UPROPERTY(BlueprintReadOnly)
+		int32 CurrentAmmo = MaxAmmo;
 
 private:
 
@@ -65,6 +77,7 @@ private:
 	UTankTurretComponent* Turret = nullptr;
 
 	float FireTime = 0.0;
+	float ReloadTime = 0.0;
 	FVector AimingDirection;
 
 	UPROPERTY(EditAnywhere, Category = Setup)

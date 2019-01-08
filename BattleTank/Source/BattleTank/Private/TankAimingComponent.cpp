@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "Projectile.h"
 #include "TankBarrelComponent.h"
+#include "GameFramework/Actor.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -61,6 +62,11 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimingDirection)
 	}
 }
 
+bool UTankAimingComponent::IsReloading()
+{
+	return ((GetWorld()->GetTimeSeconds() - ReloadTime) < ReloadInterval);
+}
+
 EAimingStatus UTankAimingComponent::GetFireStatus()
 {
 	return FireStatus;
@@ -81,10 +87,11 @@ void UTankAimingComponent::SetProjectileBP(TSubclassOf<AProjectile> ProjectileBl
 	}
 	ProjectileBP = ProjectileBluePrint;
 }
+
 void UTankAimingComponent::BeginPlay()
 {
-	Super::BeginPlay();
 	FireTime = GetWorld()->GetTimeSeconds();
+	ReloadTime = GetWorld()->GetTimeSeconds() - ReloadInterval;
 }
 
 bool UTankAimingComponent::IsBarrelMoving()
@@ -97,14 +104,16 @@ bool UTankAimingComponent::IsBarrelMoving()
 
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
-	if (GetWorld()->GetTimeSeconds() - FireTime < FireInterval) {
+	if ((CurrentAmmo == 0 || IsReloading())) {
+		FireStatus = EAimingStatus::OutOfAmmo;
+	}
+	else if (GetWorld()->GetTimeSeconds() - FireTime < FireInterval) {
 		FireStatus = EAimingStatus::Reloading;
 	}
 	else if (IsBarrelMoving()) {
 		FireStatus = EAimingStatus::Aiming;
 	}
-	else
-	{
+	else {
 		FireStatus = EAimingStatus::Locked;
 	}
 	//UEnum* pEnum = FindObject<UEnum>(ANY_PACKAGE, TEXT("EAimingStatus"));
@@ -114,9 +123,20 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 void UTankAimingComponent::Fire()
 {
 	if (!ensure(Barrel && ProjectileBP)) { return; }
-	if (FireStatus != EAimingStatus::Reloading) {
+	if (FireStatus != EAimingStatus::Reloading && FireStatus != EAimingStatus::OutOfAmmo) {
 		auto FiredProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBP, Barrel->GetSocketLocation(FName("FiringLocation")), Barrel->GetSocketRotation(FName("FiringLocation")));
 		FiredProjectile->LaunchProjectile(FireSpeed);
+		CurrentAmmo -= 1;
 		FireTime = GetWorld()->GetTimeSeconds();
 	}
+}
+
+void UTankAimingComponent::Reload()
+{
+	if (IsReloading() || CurrentAmmo == MaxAmmo) {
+		return;
+	}
+	FireStatus = EAimingStatus::OutOfAmmo;
+	CurrentAmmo = MaxAmmo;
+	ReloadTime = GetWorld()->GetTimeSeconds();
 }

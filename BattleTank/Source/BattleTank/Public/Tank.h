@@ -13,6 +13,12 @@ class BATTLETANK_API ATank : public APawn
 {
 	GENERATED_BODY()
 
-private:	
+protected:
+	UPROPERTY(BlueprintReadOnly)
+		float CurrentHitPoint = 3000.;
+
+	UPROPERTY(BlueprintReadOnly)
+		float MaxHitPoint = 3000.;
+private:
 	ATank();
 };

@@ -31,7 +31,9 @@ void ATankAIController::Tick(float DeltaTime)
 		AimingComponent->AimAt(PlayerTank->GetActorLocation()+FVector(0, 0, 100));	
 		if (AimingComponent->GetFireStatus() == EAimingStatus::Locked) {
 			AimingComponent->Fire();
-
+		}
+		else if (AimingComponent->GetFireStatus() == EAimingStatus::OutOfAmmo && !AimingComponent->IsReloading()) {
+			AimingComponent->Reload();
 		}
 	}
 }
