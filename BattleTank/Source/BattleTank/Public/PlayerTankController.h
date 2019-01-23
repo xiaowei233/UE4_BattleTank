@@ -19,6 +19,11 @@ class BATTLETANK_API APlayerTankController : public APlayerController
 {
 	GENERATED_BODY()
 	
+
+public:
+	UFUNCTION()
+		void OnTankDeath();
+
 protected:
 	UFUNCTION(BlueprintCallable, Category = "SetUp")
 		ATank* GetControlledTank() const;
@@ -43,4 +48,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		float LineTraceRange = 1000000.;
+
+	virtual void SetPawn(APawn* InPawn) override;
+
 };

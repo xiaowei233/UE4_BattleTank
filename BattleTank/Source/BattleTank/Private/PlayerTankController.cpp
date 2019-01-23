@@ -66,3 +66,21 @@ bool APlayerTankController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 	OutHitLocation = FVector(0);
 	return false;
 }
+
+void APlayerTankController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn) {
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) {
+			return;
+		}
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &APlayerTankController::OnTankDeath);
+	}
+}
+
+
+void APlayerTankController::OnTankDeath()
+{
+	StartSpectatingOnly();
+}

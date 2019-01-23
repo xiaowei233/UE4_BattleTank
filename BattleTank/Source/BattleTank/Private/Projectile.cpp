@@ -7,14 +7,17 @@
 #include "PhysicsEngine/RadialForceComponent.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "GameFramework/DamageType.h"
+#include "Kismet/GameplayStatics.h"
 void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
 {
 	LaunchBlast->Deactivate();
 	ImpactBlast->Activate();
 	RadiusForce->FireImpulse();
 
-	FTimerHandle FTimer;
+	UGameplayStatics::ApplyRadialDamage(this, BaseDamage, GetActorLocation(), RadiusForce->Radius, UDamageType::StaticClass(), TArray<AActor*>());
 
+	FTimerHandle FTimer;
 	GetWorld()->GetTimerManager().SetTimer(FTimer, this, &AProjectile::DestroyActor, DestroyDelay, false);
 }
 // Sets default values

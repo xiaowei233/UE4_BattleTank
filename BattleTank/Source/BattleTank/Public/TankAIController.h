@@ -26,9 +26,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Set Up")
 	float AcceptanceRadius = 5000.;
 
-
+	UFUNCTION()
+		void OnTankDeath();
 private:
 	UTankAimingComponent* AimingComponent = nullptr;
 	ATank* ControlledTank = nullptr;
 	ATank* PlayerTank = nullptr;
+
+	virtual void SetPawn(APawn* InPawn) override;
 };
