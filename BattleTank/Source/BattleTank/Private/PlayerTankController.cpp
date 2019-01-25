@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "PlayerTankController.h"
 #include "TankAimingComponent.h"
 #include "Engine/world.h"
@@ -14,7 +13,9 @@ ATank* APlayerTankController::GetControlledTank() const
 void APlayerTankController::BeginPlay()
 {
 	Super::BeginPlay();
+	//Initialize the aiming component at runtime
 	AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	//check if the player is in the main menu rather than in the actual game
 	bool IsMainMenu = GetWorld()->GetMapName() == "UEDPIE_0_StartMap";
 	if (ensure(AimingComponent) && !IsMainMenu) {
 		FindAimingComponent(AimingComponent);
@@ -78,7 +79,6 @@ void APlayerTankController::SetPawn(APawn * InPawn)
 		PossessedTank->OnDeath.AddUniqueDynamic(this, &APlayerTankController::OnTankDeath);
 	}
 }
-
 
 void APlayerTankController::OnTankDeath()
 {

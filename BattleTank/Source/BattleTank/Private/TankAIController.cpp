@@ -17,7 +17,6 @@ void ATankAIController::BeginPlay()
 	}
 
 	PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	//UE_LOG(LogTemp,Warning, TEXT("Player Tank Name: %s"), *PlayerTank->GetName());
 	if (!PlayerTank) {
 		UE_LOG(LogTemp, Warning, TEXT("AIController GetPlayerTank failed"));
 	}

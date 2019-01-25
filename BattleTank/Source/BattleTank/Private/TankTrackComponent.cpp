@@ -10,9 +10,8 @@ void UTankTrackComponent::SetThrottle(float Throttle)
 
 void UTankTrackComponent::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-
 	ApplyDriveForce();
-	//ApplySideForce();
+	ApplySideForce();
 	CurrentThrottle = 0;
 }
 

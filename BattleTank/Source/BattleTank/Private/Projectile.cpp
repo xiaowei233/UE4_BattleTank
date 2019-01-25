@@ -9,21 +9,19 @@
 #include "TimerManager.h"
 #include "GameFramework/DamageType.h"
 #include "Kismet/GameplayStatics.h"
+
 void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
 {
 	LaunchBlast->Deactivate();
 	ImpactBlast->Activate();
 	RadiusForce->FireImpulse();
-
 	UGameplayStatics::ApplyRadialDamage(this, BaseDamage, GetActorLocation(), RadiusForce->Radius, UDamageType::StaticClass(), TArray<AActor*>());
-
 	FTimerHandle FTimer;
 	GetWorld()->GetTimerManager().SetTimer(FTimer, this, &AProjectile::DestroyActor, DestroyDelay, false);
 }
-// Sets default values
+
 AProjectile::AProjectile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Movement Component"));
@@ -41,10 +39,8 @@ AProjectile::AProjectile()
 	ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	ImpactBlast->bAutoActivate = false;
 
-
 	RadiusForce = CreateDefaultSubobject<URadialForceComponent>(FName("Radius Force"));
 	RadiusForce->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
 }
 
 void AProjectile::DestroyActor()
@@ -52,18 +48,15 @@ void AProjectile::DestroyActor()
 	Destroy();
 }
 
-// Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	CollisionMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 }
 
-// Called every frame
 void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AProjectile::LaunchProjectile(float Speed)

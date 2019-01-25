@@ -4,8 +4,6 @@
 #include "TankTrackComponent.h"
 #include "Tank.h"
 
-
-
 void UTankMovementComponent::IntendMoveForward(float Throttle)
 {
 	if (!LeftTrack || !RightTrack || Throttle == 0) {

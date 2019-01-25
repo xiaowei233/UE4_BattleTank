@@ -10,46 +10,47 @@ class UStaticMeshComponent;
 class UParticleSystemComponent;
 class UProjectileMovementComponent;
 class URadialForceComponent;
+/*
+* This is the class defining the properties of the only projectile in this game, the explosive projectile that
+* every tank is able to shoot.
+*/
 UCLASS()
 class BATTLETANK_API AProjectile : public AActor
 {
 	GENERATED_BODY()
 
 public:
-
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	//Launch the spawned projectile at a desirable speed
 	void LaunchProjectile(float);
-	UPROPERTY(BlueprintReadOnly)
-		float Damage = 600.;
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	//The collision mesh for the projectile
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		UStaticMeshComponent* CollisionMesh = nullptr;
-
+	//The at launch blast VFX/particle system for the projectile
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		UParticleSystemComponent* LaunchBlast = nullptr;
-
+	//The at impact blast VFX/particle system for the projectile
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		UParticleSystemComponent* ImpactBlast = nullptr;
-
+	//The impact radius of the projectile
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		URadialForceComponent* RadiusForce = nullptr;
-
+	//How long the projectile will stay in the world after making an impact
 	UPROPERTY(EditDefaultsOnly)
 		float DestroyDelay = 2.5;
-
+	//The base damage of the projectile
 	UPROPERTY(EditDefaultsOnly)
 		float BaseDamage = 700.;
-
+	//Deal with the effects to trigger and damages to calculate
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 private:
-	// Sets default values for this actor's properties
 	AProjectile();
+	virtual void Tick(float DeltaTime) override;
+	virtual void BeginPlay() override;
+	//Destroy the actor
 	void DestroyActor();
+	//The component for making the projectile move
 	UProjectileMovementComponent* ProjectileMovementComponent;
 };
